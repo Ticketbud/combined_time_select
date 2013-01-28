@@ -7,8 +7,9 @@ end
 
 module ActiveSupport
   class HashWithIndifferentAccess < Hash
-    def parse_time_select!(attribute)
-      self[attribute] = Time.zone.parse("#{self["#{attribute}(1i)"]}-#{self["#{attribute}(2i)"]}-#{self["#{attribute}(3i)"]} #{self["#{attribute}(5i)"]}")
+    def parse_time_select!(attribute, zone=nil)
+      zone = ActiveSupport::TimeZone[zone] || Time.zone
+      self[attribute] = zone.parse("#{self["#{attribute}(1i)"]}-#{self["#{attribute}(2i)"]}-#{self["#{attribute}(3i)"]} #{self["#{attribute}(5i)"]}")
       (1..5).each { |i| self.delete "#{attribute}(#{i}i)" }
       self
     end
